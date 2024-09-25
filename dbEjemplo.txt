@@ -1,0 +1,23 @@
+CREATE TABLE cliente(
+  cedula INT(10) PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL,
+  celular INT(10) NOT NULL
+);
+
+CREATE TABLE empresa(
+  nit INT(10) PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL,
+  presupuesto INT(10) NOT NULL,
+  cliente INT(10),
+  FOREIGN KEY(cliente) REFERENCES cliente
+);
+
+CREATE TABLE proyecto(
+  codigo INT(10) PRIMARY KEY,
+  fechacreacion DATE NOT NULL,
+  valor INT(10) NOT NULL,
+  cliente INT(10),
+  empresa INT(10),
+  FOREIGN KEY(cliente) REFERENCES cliente,
+  FOREIGN KEY(empresa) REFERENCES empresa
+);
