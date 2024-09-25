@@ -14,30 +14,30 @@
 <body>
 <div class="container mt-5">
 
-    <h1>Trabajo final BD1 - (Título de su trabajo)</h1>
+    <h1>Trabajo final BD1 - Biblioteca de Barrancabermeja</h1>
 
     <div class="informacion">
         <ul>
             <li><b>Materia:</b> Bases de Datos I</li>
             <li><b>Profesor:</b> Francisco Javier Moreno Arboleda</li>
             <li><b>Institución:</b> Universidad Nacional de Colombia sede Medellín</li>
-            <li><b>Semestre:</b> 2022-1</li>
+            <li><b>Semestre:</b> 2024-1</li>
         </ul>
     </div>
 
     <div class="integrantes">
         <h2>Integrantes</h2>
         <ul>
-            <li>Integrante 1</li>
-            <li>Integrante 2</li>
-            <li>Integrante 3</li>
+            <li>Juan Gabriel Góez Duque</li>
+            <li>Madeleinne Paulina Henao García</li>
+            <li>Carlos Andrés Sánchez Ortega</li>
         </ul>
     </div>
 
     <div class="modelo">
-        <h2>Modelo E-R (Lo pueden eliminar o poner su modelo análogo)</h2>
+        <h2>Modelo E-R Análogo</h2>
         <p></p>
-        <img src="modelo.png">
+        <img src="modelo_barranca.png" width = 75% height = 80%>
     </div>
 
     <div class="enlaces">
