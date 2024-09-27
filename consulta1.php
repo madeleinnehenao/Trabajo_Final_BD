@@ -20,21 +20,36 @@ require('../config/conexion.php');
 // los ordenamos de mayor a menor. En caso de empate, mostramos todos los bibliotecarios.
 
 $query = "
-SELECT bibliotecario.documento_de_identificacion AS cedula,
-bibliotecario.nombre_completo AS nombre, COUNT(ejemplar.identificador) AS total_ejemplares
-FROM bibliotecario
-JOIN ejemplar ON bibliotecario.documento_de_identificacion = ejemplar.receptor
-GROUP BY bibliotecario.documento_de_identificacion, bibliotecario.nombre_completo
-HAVING total_ejemplares = (
-    SELECT MAX(total_ejemplares)
-    FROM (
-        SELECT COUNT(ejemplar.identificador) AS total_ejemplares
-        FROM bibliotecario
-        JOIN ejemplar ON bibliotecario.documento_de_identificacion = ejemplar.receptor
-        GROUP BY bibliotecario.documento_de_identificacion
-    ) AS subquery
+WITH EjemplaresContados AS (
+    SELECT 
+        b.documento_de_identificacion, 
+        b.nombre_completo,
+        COUNT(e.identificador) AS total_ejemplares
+    FROM 
+        bibliotecario b
+    JOIN 
+        ejemplar e ON b.documento_de_identificacion = e.receptor
+    GROUP BY 
+        b.documento_de_identificacion, b.nombre_completo
+),
+RankedBibliotecarios AS (
+    SELECT 
+        documento_de_identificacion,
+        nombre_completo,
+        total_ejemplares,
+        RANK() OVER (ORDER BY total_ejemplares DESC) AS ranking
+    FROM 
+        EjemplaresContados
 )
-ORDER BY total_ejemplares DESC;
+
+SELECT 
+    documento_de_identificacion, 
+    nombre_completo,
+    total_ejemplares  -- Se incluye el total de ejemplares recibidos
+FROM 
+    RankedBibliotecarios
+WHERE 
+    ranking <= 3
 ";
 
 // Ejecutar la consulta
@@ -56,9 +71,9 @@ if ($resultadoC1 && $resultadoC1->num_rows > 0):
         <!-- Títulos de la tabla -->
         <thead class="table-dark">
             <tr>
-                <th scope="col" class="text-center">Cédula</th>
+                <th scope="col" class="text-center">Documento de Identificación</th>
                 <th scope="col" class="text-center">Nombre</th>
-                <th scope="col" class="text-center">Ejemplares Recibidos</th>
+                <th scope="col" class="text-center">Total Ejemplares Recibidos</th> <!-- Se agrega la columna para total de ejemplares -->
             </tr>
         </thead>
 
@@ -72,9 +87,9 @@ if ($resultadoC1 && $resultadoC1->num_rows > 0):
             <!-- Fila que se generará -->
             <tr>
                 <!-- Cada una de las columnas, con su valor correspondiente -->
-                <td class="text-center"><?= $fila["cedula"]; ?></td>
-                <td class="text-center"><?= $fila["nombre"]; ?></td>
-                <td class="text-center"><?= $fila["total_ejemplares"]; ?></td>
+                <td class="text-center"><?= $fila["documento_de_identificacion"]; ?></td>
+                <td class="text-center"><?= $fila["nombre_completo"]; ?></td>
+                <td class="text-center"><?= $fila["total_ejemplares"]; ?></td> <!-- Mostrar total de ejemplares -->
             </tr>
 
             <?php
